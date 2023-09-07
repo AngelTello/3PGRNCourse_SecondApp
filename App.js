@@ -6,10 +6,16 @@ import {
   SafeAreaView,
   Alert,
   ScrollView,
+  ImageBackground,
+  Image,
 } from "react-native";
 import InputNumber from "./components/InputNumber";
 import PrimaryButton from "./components/PrimaryButton";
 import NumberContainer from "./components/NumberContainer";
+import { LinearGradient } from "expo-linear-gradient";
+import Colors from "./constants/colors";
+import IconButton from "./components/IconButton";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [firstNumber, setFirstNumber] = useState(0);
@@ -103,59 +109,86 @@ export default function App() {
     setResult(mathResult);
   };
 
-  const isMathOperationsEnabled = firstNumber !== 0 && secondNumber !== 0;
-
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <ScrollView>
-        <Text style={styles.textInstructions}>
-          Please introduce 2 numbers and then select the{" "}
-          <Text style={{ fontWeight: "bold", fontStyle: "italic" }}>math</Text>{" "}
-          operation that you would like to do with them.
-        </Text>
-        <InputNumber id="first" onNumberSelected={newNumberSelectedHandler} />
-        <InputNumber id="second" onNumberSelected={newNumberSelectedHandler} />
-        {isMathOperationsEnabled && (
-          <>
-            <View>
+    <>
+      <StatusBar style="light" />
+      <LinearGradient
+        colors={[Colors.primary700, Colors.accent500]}
+        style={styles.rootScreen}
+      >
+        <ImageBackground
+          source={require("./assets/images/background.jpg")}
+          resizeMode="cover"
+          style={styles.rootContainer}
+          imageStyle={styles.backgroundImage}
+        >
+          <SafeAreaView style={styles.rootContainer}>
+            <ScrollView>
               <Text style={styles.textInstructions}>
-                Math operations available:
+                Please introduce 2 numbers and then select the{" "}
+                <Text style={{ fontWeight: "bold", fontStyle: "italic" }}>
+                  math
+                </Text>{" "}
+                operation that you would like to do with them.
               </Text>
-            </View>
-            <View style={styles.mathOperationsAvailable}>
-              <PrimaryButton onPress={mathAdditionHandler}>+</PrimaryButton>
-              <PrimaryButton onPress={mathSubtractionHandler}>-</PrimaryButton>
-              <PrimaryButton onPress={mathMultiplicationHandler}>
-                x
-              </PrimaryButton>
-              <PrimaryButton onPress={mathDivisionHandler}>/</PrimaryButton>
-            </View>
-            {result >= 0 && errorMessage === "" && (
+              <View>
+                <InputNumber
+                  id="first"
+                  onNumberSelected={newNumberSelectedHandler}
+                />
+                <InputNumber
+                  id="second"
+                  onNumberSelected={newNumberSelectedHandler}
+                />
+              </View>
               <View>
                 <Text style={styles.textInstructions}>
-                  Math operation result
+                  Math operations available:
                 </Text>
-                <NumberContainer>{result}</NumberContainer>
               </View>
-            )}
-          </>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+              <View style={styles.mathOperationsAvailable}>
+                <PrimaryButton onPress={mathAdditionHandler}>+</PrimaryButton>
+                <PrimaryButton onPress={mathSubtractionHandler}>
+                  -
+                </PrimaryButton>
+                <PrimaryButton onPress={mathMultiplicationHandler}>
+                  x
+                </PrimaryButton>
+                <PrimaryButton onPress={mathDivisionHandler}>/</PrimaryButton>
+              </View>
+              {result >= 0 && errorMessage === "" && (
+                <View style={styles.resultContainer}>
+                  <Text style={styles.textInstructions}>
+                    Math operation result
+                  </Text>
+                  <NumberContainer>
+                    <Image source={require("./assets/images/result.png")} />
+                    {result}
+                  </NumberContainer>
+                  <IconButton iconName="return-up-back" />
+                </View>
+              )}
+            </ScrollView>
+          </SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  rootScreen: {
+    flex: 1,
+  },
   rootContainer: {
     flex: 1,
-    backgroundColor: "#911611",
-    paddingHorizontal: 25,
   },
   textInstructions: {
     color: "#FFF",
     fontSize: 20,
     textAlign: "center",
     marginTop: 50,
+    paddingHorizontal: 25,
   },
   mathOperationsAvailable: {
     flexDirection: "row",
@@ -163,5 +196,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     columnGap: 33,
     paddingVertical: 30,
+  },
+  backgroundImage: {
+    opacity: 0.15,
+  },
+  resultContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
   },
 });
