@@ -16,12 +16,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import Colors from "./constants/colors";
 import IconButton from "./components/IconButton";
 import { StatusBar } from "expo-status-bar";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 export default function App() {
   const [firstNumber, setFirstNumber] = useState(0);
   const [secondNumber, setSecondNumber] = useState(0);
   const [result, setResult] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [fontsLoaded] = useFonts({
+    "montserrat": require("./assets/fonts/Montserrat-Regular.ttf"),
+    "coming-soon": require("./assets/fonts/ComingSoon-Regular.ttf")
+  });
 
   const newNumberSelectedHandler = (id, value) => {
     if (id === "first") {
@@ -109,6 +116,10 @@ export default function App() {
     setResult(mathResult);
   };
 
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -189,6 +200,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 50,
     paddingHorizontal: 25,
+    fontFamily: "coming-soon",
   },
   mathOperationsAvailable: {
     flexDirection: "row",

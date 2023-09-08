@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   textNumber: {
     color: "#000",
     fontSize: 20,
+    fontFamily: "montserrat",
   },
   inputNumber: {
     fontSize: 18,
